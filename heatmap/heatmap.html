@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>EP Least-Travel Time Heatmap</title>
+        <link rel="stylesheet" type="text/css" href="heatmap.css">
+        <link rel="stylesheet" type="text/css" href="../common/pageHeader.css">
+
+        <script src="heatmap.js"></script>
+        <script src="../common/locations.js"></script>
+		<script src="geoLocationConversion.js"></script>
+
+    </head>
+    <body>
+        <div id="header">
+             <div id="ukLogo"><img src="../assets/images/logos/uk-logo.gif"/></div>
+             <div id="pageTitle">Emergency Personnel Least-Travel Time Heatmap</div>
+        </div>
+
+        <div class="container">
+            <div id="locationSelector">
+                <input type="radio" id="radio_pd" name="loc_radios" value="all" onclick="displayHeatmapLayer('Police')" checked>
+                <label for="radio_pd">Police Stations</label>
+                
+                <input type="radio" id="radio_hosp" name="loc_radios" value="false" onclick="displayHeatmapLayer('Hospital')">
+                <label for="radio_hosp">Hospitals</label>
+                
+                <input type="radio" id="radio_fd" name="loc_radios" value="false" onclick="displayHeatmapLayer('Fire')">
+                <label for="radio_fd">Fire Departments</label>
+            </div>
+
+            <div id="showLocations">
+                <input type="checkbox" id="checkbox_showLoc" value="false" onclick="toggleMarkers()">
+                <label for="checkbox_showLoc">Show Locations</label>
+            </div>
+
+            
+            <div id="heatmapSelector">
+                <input type="radio" id="radio_tMap" name="hm_radios" value="all" onclick="setHeatmapType('time')" checked>
+                <label for="radio_tMap">Time Heatmap</label>
+                
+                <input type="radio" id="radio_dMap" name="hm_radios" value="false" onclick="setHeatmapType('distance')">
+                <label for="radio_dMap">Distance Heatmap</label>
+            </div>
+
+        </div>
+
+        <div id="map"></div>
+
+        <script async defer 
+        src="https://maps.googleapis.com/maps/api/js?AIzaSyBQzpglO-65VjZnsPSac1-rZ1JIduXdtZo&callback=initMap"></script>
+
+        </body>
+</html>

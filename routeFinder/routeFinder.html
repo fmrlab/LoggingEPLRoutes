@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="routeFinder.css">
+	<link rel="stylesheet" type="text/css" href="../common/pageHeader.css">
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAjq-4pLqcpNC4V0WrfzaQ9sk2zEENgNA0&sensor=false"></script>
+
+	<script src="../assets/include/infobubble.js"></script>
+	<script src="route-core.js"></script>
+	<script src="routeFinder.js"></script>
+	<script src="../common/locations.js"></script>
+
+</head>
+
+<body>
+	<div id="header">
+	     <div id="ukLogo"><img src="../assets/images/logos/uk-logo.gif"/></div>
+	     <div id="pageTitle">Emergency Personnel Location Route Finder</div>
+	</div>
+
+
+
+	<button type="button" class="action-button" id="calc_route" disabled=true onclick="calcAllRoutes();">Calculate routes</button>
+	<button type="button" class="action-button" id="clear" onclick="location.reload();">Clear</button>
+	
+	<img class="marker_legend" src='https://maps.google.com/mapfiles/ms/icons/blue-dot.png'>
+	<p>Police Station</p>
+	<img class="marker_legend" src='https://maps.google.com/mapfiles/ms/icons/orange-dot.png'>
+	<p>Hospital</p>
+	<img class="marker_legend" src='https://maps.google.com/mapfiles/ms/icons/yellow-dot.png'>
+	<p>Fire Department</p>
+	<img class="marker_legend" src='https://maps.google.com/mapfiles/ms/icons/red-dot.png'>
+	<p>Logging Site</p>
+	<img class="marker_legend" src='https://maps.google.com/mapfiles/ms/icons/green-dot.png'>
+	<p>Access Location</p>
+	
+	<div id="map-canvas"></div>
+
+	<div id="panel-header">
+		<p>Directions </p><p id="directions-text">to</p><p> logging site</p>
+		<button type="button" class="action-button" id="reverse" disabled=true onclick='reverseDirections();'>Reverse</button>
+	</div>
+	<div id='panel-body'>
+		<div class="directions-panel" id="police">
+			<button class="button_nav" type="button" id="police_button" onclick="displayRoute(0, rendererToDisplay, null, null, gNumberOfRoutes * 3, gMap, false);"></button>
+		</div>
+		<div class="directions-panel" id="hospital">
+			<button class="button_nav" type="button" id="hospital_button" onclick="displayRoute(1, rendererToDisplay, null, null, gNumberOfRoutes * 3, gMap, false);"></button>
+		</div>
+		<div class="directions-panel" id="fire">
+			<button class="button_nav" type="button" id="fire_button" onclick="displayRoute(2, rendererToDisplay, null, null, gNumberOfRoutes * 3, gMap, false);"></button>
+		</div>
+	</div>
+
+</body>
+</html>
