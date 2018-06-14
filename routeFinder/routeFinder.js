@@ -19,11 +19,11 @@ var rendererToDisplay;
 function initialize() {
 	gDirectionsService = new google.maps.DirectionsService();
 	gLatlngbounds = new google.maps.LatLngBounds();
-	gPanelId = [ "police", "hospital", "fire" ];
+	gPanelId = ["police", "hospital", "fire"];
 	rendererToDisplay = gDirectionsRenderer;
 
 	// create a google map object centered on Kentucky
-	gMap = new google.maps.Map(document.getElementById("map-canvas"),{
+	gMap = new google.maps.Map(document.getElementById("map-canvas"), {
 		center: new google.maps.LatLng(37.6000, -84.1000), // KY coordinates
 		zoom: 8,
 		mapTypeId: google.maps.MapTypeId.ROADMAP,
@@ -35,22 +35,22 @@ function initialize() {
 	});
 
 	// Load KML layer that defines the study area
-	gKmzLayer = new google.maps.KmlLayer('http://www2.ca.uky.edu/forestry/loggingEPLroutes/assets/kml-data/StudyArea_Black.zip', { 
-		clickable: false, 
-		suppressInfoWindows: true, 
-		preserveViewport: true 
+	gKmzLayer = new google.maps.KmlLayer('http://www2.ca.uky.edu/forestry/loggingEPLroutes/assets/kml-data/StudyArea_Black.zip', {
+		clickable: false,
+		suppressInfoWindows: true,
+		preserveViewport: true
 	});
-	
+
 	gKmzLayer.setMap(gMap);
 
 	populateAndDisplayMarkers();
 
 	// add click event to place a marker on the map
-	google.maps.event.addListener(gMap, 'click', function(event) {
+	google.maps.event.addListener(gMap, 'click', function (event) {
 		gUserMarker = placeMarker(event.latLng, gUserMarker, gMap);
 
 		// enable the "Calculate routes" button
-		if(document.getElementById('calc_route').disabled) {
+		if (document.getElementById('calc_route').disabled) {
 			document.getElementById('calc_route').disabled = false;
 		}
 	});
@@ -70,13 +70,13 @@ function initialize() {
 function calcRoute(start, end, routeNum, directionsRenderer) {
 	// create a request object for the directions service call
 	var request = {
-		origin:start,
-		destination:end,
+		origin: start,
+		destination: end,
 		travelMode: google.maps.TravelMode.DRIVING
 	};
 
 	// call google directions service
-	gDirectionsService.route(request, function(result, status) {
+	gDirectionsService.route(request, function (result, status) {
 		if (status == google.maps.DirectionsStatus.OK) {
 			// call google directions renderer
 			directionsRenderer[routeNum] = new google.maps.DirectionsRenderer({
@@ -88,7 +88,7 @@ function calcRoute(start, end, routeNum, directionsRenderer) {
 		}
 		gCallback--; // decrease the callback number
 
-		if(gCallback == 0) { // once we calculated "gNumberOfPoints" routes, call a function to calculate the 3 closest
+		if (gCallback == 0) { // once we calculated "gNumberOfPoints" routes, call a function to calculate the 3 closest
 			// sort the array from shortest time to longest
 			gDirectionsRenderer.sort(_sortDirections);
 
@@ -115,13 +115,12 @@ function calcRoute(start, end, routeNum, directionsRenderer) {
 
 			var position = directionsRenderer[0].directions.routes[0].legs[0].end_location;
 
-			if(Math.abs(end.lat() - position.lat()) > 0.001 || Math.abs(end.lng() - position.lng()) > 0.001) {
+			if (Math.abs(end.lat() - position.lat()) > 0.001 || Math.abs(end.lng() - position.lng()) > 0.001) {
 				var marker = new google.maps.Marker({
-					draggable: false,
+					draggable: true,
 					position: position,
 					map: gMap,
-					icon: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png',
-					zIndex: -1
+					icon: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png'
 				});
 
 				// create an infowindow to display the address of the marker
@@ -131,8 +130,11 @@ function calcRoute(start, end, routeNum, directionsRenderer) {
 
 
 				// add click event to open infowindow when marker is clicked
-				google.maps.event.addListener(marker, 'click', function(event) {
+				google.maps.event.addListener(marker, 'click', function (event) {
 					infoWindow.open(gMap, marker);
+				});
+				google.maps.event.addListener(marker, 'dragend', function () {
+
 				});
 			}
 		}
@@ -148,7 +150,7 @@ function displayClosest(directionsRenderer) {
 	// change the polyline options(change color) for route one
 	//directionsRenderer[0].setOptions({polylineOptions: gPolylineOptionsRoute1});
 
-	for(var i = 0; i < directionsRenderer.length; i++) {
+	for (var i = 0; i < directionsRenderer.length; i++) {
 		// create infowindow for route
 		directionsRenderer[i].infoWindow = new InfoBubble({
 			maxWidth: 250,
@@ -192,18 +194,18 @@ function addRouteClickListener(i, directionsRenderer) {
 	var route = i;
 	var text = "undefined";
 
-	if(i == 0) {
+	if (i == 0) {
 		text = "police_button"
 	}
 	else if (i == 1) {
 		text = "hospital_button";
 	}
-	else if(i == 2) {
+	else if (i == 2) {
 		text = "fire_button";
 	}
 
 	// blabla
-	google.maps.event.addListener(directionsRenderer[route], 'directions_changed', function(event){
+	google.maps.event.addListener(directionsRenderer[route], 'directions_changed', function (event) {
 		updateText(directionsRenderer, route, null);
 
 		document.getElementById(text).innerHTML = document.getElementById(text).innerHTML.split("-")[0] + " - User Modified Route";
@@ -237,12 +239,12 @@ function calcAllRoutes() {
 	gLatlngbounds.extend(gUserMarker.position);
 
 	// If enabled, disable the "Calculate routes" button
-	if(!document.getElementById('calc_route').disabled) {
+	if (!document.getElementById('calc_route').disabled) {
 		document.getElementById('calc_route').disabled = true;
 	}
 
 	// enable reverse routes button
-	if(document.getElementById('reverse').disabled) {
+	if (document.getElementById('reverse').disabled) {
 		document.getElementById('reverse').disabled = false;
 	}
 }
@@ -251,10 +253,10 @@ function calcAllRoutes() {
 * Reverse directions
 */
 function reverseDirections() {
-	var endPoints = [ gClosestPolice[0].position, gClosestFireStation[0].position, gClosestHospital[0].position ];
+	var endPoints = [gClosestPolice[0].position, gClosestFireStation[0].position, gClosestHospital[0].position];
 	var rendererToRemove;
 
-	if(document.getElementById("directions-text").innerHTML == "from") {
+	if (document.getElementById("directions-text").innerHTML == "from") {
 		document.getElementById("directions-text").innerHTML = "to";
 		rendererToDisplay = gDirectionsRenderer;
 		rendererToRemove = gDirectionsRenderer2;
@@ -277,7 +279,7 @@ function reverseDirections() {
 			travelMode: google.maps.TravelMode.DRIVING
 		};
 
-		if(gDirectionsRenderer2[0] == null) {
+		if (gDirectionsRenderer2[0] == null) {
 			// call google directions service
 			gDirectionsService.route(request, buildDCallback(i));
 		}
@@ -288,37 +290,37 @@ function reverseDirections() {
 }
 
 function buildDCallback(i) {
-	return function(result, status) {
-			if (status == google.maps.DirectionsStatus.OK) {
-				// call google directions renderer
-				gDirectionsRenderer2[i] = new google.maps.DirectionsRenderer({
-					directions: result,
-					preserveViewport: true, // don't change the view
-					suppressMarkers: true, // don't add markers at the start and end
-					draggable: true,
-				});
-			}
-			else {
-				console.log("failed: " + i);
-			}
-			gDirectionsRenderer2[i].infoWindow = new InfoBubble({
-				maxWidth: 250,
-				maxHeight: 100,
-				content: null,
-				position: new google.maps.LatLng(0, 0),
-				shadowStyle: 1,
-				padding: 0,
-				backgroundColor: 'rgb(57,57,57)',
-				borderRadius: 4,
-				arrowSize: 10,
-				borderWidth: 1,
-				borderColor: '#2c2c2c',
-				disableAutoPan: true,
-				arrowPosition: 30,
-				arrowStyle: 2
+	return function (result, status) {
+		if (status == google.maps.DirectionsStatus.OK) {
+			// call google directions renderer
+			gDirectionsRenderer2[i] = new google.maps.DirectionsRenderer({
+				directions: result,
+				preserveViewport: true, // don't change the view
+				suppressMarkers: true, // don't add markers at the start and end
+				draggable: true,
 			});
-			openAfterReverse(rendererToDisplay, i);
-		};
+		}
+		else {
+			console.log("failed: " + i);
+		}
+		gDirectionsRenderer2[i].infoWindow = new InfoBubble({
+			maxWidth: 250,
+			maxHeight: 100,
+			content: null,
+			position: new google.maps.LatLng(0, 0),
+			shadowStyle: 1,
+			padding: 0,
+			backgroundColor: 'rgb(57,57,57)',
+			borderRadius: 4,
+			arrowSize: 10,
+			borderWidth: 1,
+			borderColor: '#2c2c2c',
+			disableAutoPan: true,
+			arrowPosition: 30,
+			arrowStyle: 2
+		});
+		openAfterReverse(rendererToDisplay, i);
+	};
 }
 
 function openAfterReverse(renderer, route) {
