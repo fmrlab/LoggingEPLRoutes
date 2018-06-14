@@ -15,13 +15,14 @@ var gCallback = 3 * gNumberOfPoints;
 var gKmzLayer;
 var gPanelId;
 var rendererToDisplay;
+var gAccessPointMarker;
 
 function initialize() {
 	gDirectionsService = new google.maps.DirectionsService();
 	gLatlngbounds = new google.maps.LatLngBounds();
 	gPanelId = ["police", "hospital", "fire"];
 	rendererToDisplay = gDirectionsRenderer;
-
+	gAccessPointMarker = null;
 	// create a google map object centered on Kentucky
 	gMap = new google.maps.Map(document.getElementById("map-canvas"), {
 		center: new google.maps.LatLng(37.6000, -84.1000), // KY coordinates
@@ -115,11 +116,42 @@ function calcRoute(start, end, routeNum, directionsRenderer) {
 
 			var position = directionsRenderer[0].directions.routes[0].legs[0].end_location;
 
-			if (Math.abs(end.lat() - position.lat()) > 0.001 || Math.abs(end.lng() - position.lng()) > 0.001) {
-				var marker = new google.maps.Marker({
+			//if (Math.abs(end.lat() - position.lat()) > 0.001 || Math.abs(end.lng() - position.lng()) > 0.001) {
+			if (gAccessPointMarker == null){
+				gAccessPointMarker = new google.maps.Marker({
 					draggable: true,
 					position: position,
 					map: gMap,
+					zIndex:1500,
+					icon: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png'
+				});
+
+				// create an infowindow to display the address of the marker
+				var infoWindow = new google.maps.InfoWindow({
+					content: '<div style="width: 180px">Access Point<br />Lat: ' + position.lat().toFixed(4) + ' Long: ' + position.lng().toFixed(4) + '</div>'
+				});
+
+
+				// add click event to open infowindow when marker is clicked
+				google.maps.event.addListener(gAccessPointMarker, 'click', function (event) {
+					infoWindow.open(gMap, gAccessPointMarker);
+				});
+				google.maps.event.addListener(gAccessPointMarker, 'dragend', function () {
+					gCallback = 3 * gNumberOfPoints;
+					for (var i = 0; i < directionsRenderer.length; i++){
+						gDirectionsRenderer[i].setMap(null);
+						gDirectionsRenderer[i].setPanel(null);
+						gDirectionsRenderer[i].infoWindow.close();
+						gDirectionsRenderer[i] = null;
+					}
+					calcNClosestRoute(gAccessPointMarker);
+
+				});
+				/*var marker = new google.maps.Marker({
+					draggable: true,
+					position: position,
+					map: gMap,
+					zIndex:500,
 					icon: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png'
 				});
 
@@ -135,7 +167,9 @@ function calcRoute(start, end, routeNum, directionsRenderer) {
 				});
 				google.maps.event.addListener(marker, 'dragend', function () {
 
-				});
+				});*/
+			}else{
+				gAccessPointMarker.setPosition(position);
 			}
 		}
 	});
@@ -215,6 +249,18 @@ function addRouteClickListener(i, directionsRenderer) {
 	});
 }
 
+
+function calcNClosestRoute(accessMarker){
+	gClosestPolice = findClosest(accessMarker.getPosition(), gNumberOfPoints, gMarkers);
+	gClosestFireStation = findClosest(accessMarker.getPosition(), gNumberOfPoints, gMarkers2);
+	gClosestHospital = findClosest(accessMarker.getPosition(), gNumberOfPoints, gMarkers3);
+
+	for (var i = 0; i < gNumberOfPoints; i++) {
+		calcRoute(gClosestPolice[i].position, accessMarker.position, i, gDirectionsRenderer);
+		calcRoute(gClosestFireStation[i].position, accessMarker.position, i, gDirectionsRenderer2);
+		calcRoute(gClosestHospital[i].position, accessMarker.position, i, gDirectionsRenderer3);
+	}
+}
 /**
 * Calculate routes to closest locations
 */
@@ -224,8 +270,8 @@ function calcAllRoutes() {
 
 	// clear click event listeners on map so the marker doesn't change position anymore
 	google.maps.event.clearListeners(gMap, 'click');
-
-	gClosestPolice = findClosest(gUserMarker.getPosition(), gNumberOfPoints, gMarkers);
+	calcNClosestRoute(gUserMarker);
+	/*gClosestPolice = findClosest(gUserMarker.getPosition(), gNumberOfPoints, gMarkers);
 	gClosestFireStation = findClosest(gUserMarker.getPosition(), gNumberOfPoints, gMarkers2);
 	gClosestHospital = findClosest(gUserMarker.getPosition(), gNumberOfPoints, gMarkers3);
 
@@ -233,7 +279,7 @@ function calcAllRoutes() {
 		calcRoute(gClosestPolice[i].position, gUserMarker.position, i, gDirectionsRenderer);
 		calcRoute(gClosestFireStation[i].position, gUserMarker.position, i, gDirectionsRenderer2);
 		calcRoute(gClosestHospital[i].position, gUserMarker.position, i, gDirectionsRenderer3);
-	}
+	}*/
 
 	// add user marker to bounds object
 	gLatlngbounds.extend(gUserMarker.position);

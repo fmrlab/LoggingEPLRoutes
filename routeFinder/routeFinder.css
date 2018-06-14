@@ -48,7 +48,11 @@ html, body {
 .marker_legend {
 	margin-top: 2px;
 }
- 
+
+.marker_legend_r{
+	float: right;
+	margin-top: 2px;
+}
 .button_nav {
 	background: #fff;
 	padding: 5px;
