@@ -53,6 +53,11 @@ html, body {
 	float: right;
 	margin-top: 2px;
 }
+
+.marker_text{
+	float: right;
+}
+
 .button_nav {
 	background: #fff;
 	padding: 5px;

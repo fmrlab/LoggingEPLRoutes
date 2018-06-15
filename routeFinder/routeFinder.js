@@ -113,10 +113,9 @@ function calcRoute(start, end, routeNum, directionsRenderer) {
 			document.getElementById("hospital_button").innerHTML = "Hospital - Optimized Route";
 			gDirectionsRenderer[2].setPanel(document.getElementById(gPanelId[2]));
 			document.getElementById("fire_button").innerHTML = "Fire Department - Optimized Route";
+			
+			var position = gDirectionsRenderer[0].directions.routes[0].legs[0].end_location;
 
-			var position = directionsRenderer[0].directions.routes[0].legs[0].end_location;
-
-			//if (Math.abs(end.lat() - position.lat()) > 0.001 || Math.abs(end.lng() - position.lng()) > 0.001) {
 			if (gAccessPointMarker == null){
 				gAccessPointMarker = new google.maps.Marker({
 					draggable: true,
