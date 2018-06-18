@@ -16,6 +16,7 @@ var gKmzLayer;
 var gPanelId;
 var rendererToDisplay;
 var gAccessPointMarker;
+var gDrawingManager;
 
 function initialize() {
 	gDirectionsService = new google.maps.DirectionsService();
@@ -59,6 +60,21 @@ function initialize() {
 	// Hide directions panel on map load. Panel only needs to be shown when calculate routes
 	document.getElementById("panel-header").style.display = "none";
 	document.getElementById("panel-body").style.display = "none";
+	gDrawingManager =  new google.maps.drawing.DrawingManager({
+        drawingMode: google.maps.drawing.OverlayType.POLYLINE,
+        drawingControl: true,
+        drawingControlOptions: {
+          position: google.maps.ControlPosition.TOP_LEFT,
+          drawingModes: [
+            google.maps.drawing.OverlayType.POLYLINE
+          ]
+        },
+        polylineOptions: {
+            strokeColor: "#ff0000",
+            strokeWeight: 2
+        }
+      });
+    gDrawingManager.setMap(gMap);
 }
 
 /**
