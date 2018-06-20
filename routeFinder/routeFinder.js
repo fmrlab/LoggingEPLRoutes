@@ -61,7 +61,6 @@ function initialize() {
 	document.getElementById("panel-header").style.display = "none";
 	document.getElementById("panel-body").style.display = "none";
 	gDrawingManager =  new google.maps.drawing.DrawingManager({
-        drawingMode: google.maps.drawing.OverlayType.POLYLINE,
         drawingControl: true,
         drawingControlOptions: {
           position: google.maps.ControlPosition.TOP_LEFT,
@@ -108,27 +107,54 @@ function calcRoute(start, end, routeNum, directionsRenderer) {
 		if (gCallback == 0) { // once we calculated "gNumberOfPoints" routes, call a function to calculate the 3 closest
 			// sort the array from shortest time to longest
 			gDirectionsRenderer.sort(_sortDirections);
-
+			gDirectionsRenderer2.sort(_sortDirections);
+			gDirectionsRenderer3.sort(_sortDirections);
 			// remove all the unneeded routes from array, we only want "gNumberOfRoutes" points
 			gDirectionsRenderer.splice(gNumberOfRoutes, gNumberOfPoints - gNumberOfRoutes);
+			
+			if(gDirectionsRenderer2.length > 0){
+				gDirectionsRenderer[1] = gDirectionsRenderer2[0];	
+			}
+			if(gDirectionsRenderer3.length > 0){
+				gDirectionsRenderer[2] = gDirectionsRenderer3[0];
+			}
+			
+			for(var i = gDirectionsRenderer2.length -1 ; i>= 0; i--){
+				gDirectionsRenderer2[i] = null;
+				gDirectionsRenderer2.pop();
+			}
 
-			gDirectionsRenderer[1] = gDirectionsRenderer2[0];
-			gDirectionsRenderer[2] = gDirectionsRenderer3[0];
-			gDirectionsRenderer2[0] = null;
-			gDirectionsRenderer2[1] = null;
-			gDirectionsRenderer2[2] = null;
+			for(var i = gDirectionsRenderer3.length -1 ; i>= 0; i--){
+				gDirectionsRenderer3[i] = null;
+				gDirectionsRenderer3.pop();
+			}
 
 			displayClosest(gDirectionsRenderer);
 
 			document.getElementById("panel-header").style.display = "block";
 			document.getElementById("panel-body").style.display = "flex";
 
-			gDirectionsRenderer[0].setPanel(document.getElementById(gPanelId[0]));
+			var buttonIds = [];
+			buttonIds[0] = "police_button";
+			buttonIds[1] = "hospital_button";
+			buttonIds[2] = "fire_button";
+			
+			var buttonNames = [];
+			buttonNames[0] = "Police Station - Optimized Route";
+			buttonNames[1] = "Hospital - Optimized Route";
+			buttonNames[2] = "Fire Department - Optimized Route";
+
+			for(var i = 0; i < gDirectionsRenderer.length; i++){
+				gDirectionsRenderer[i].setPanel(document.getElementById(gPanelId[i]));
+				document.getElementById(buttonIds[i]).innerHTML = buttonNames[i];
+			}
+			
+			/*gDirectionsRenderer[0].setPanel(document.getElementById(gPanelId[0]));
 			document.getElementById("police_button").innerHTML = "Police Station - Optimized Route";
 			gDirectionsRenderer[1].setPanel(document.getElementById(gPanelId[1]));
 			document.getElementById("hospital_button").innerHTML = "Hospital - Optimized Route";
 			gDirectionsRenderer[2].setPanel(document.getElementById(gPanelId[2]));
-			document.getElementById("fire_button").innerHTML = "Fire Department - Optimized Route";
+			document.getElementById("fire_button").innerHTML = "Fire Department - Optimized Route";*/
 			
 			var position = gDirectionsRenderer[0].directions.routes[0].legs[0].end_location;
 
@@ -153,11 +179,17 @@ function calcRoute(start, end, routeNum, directionsRenderer) {
 				});
 				google.maps.event.addListener(gAccessPointMarker, 'dragend', function () {
 					gCallback = 3 * gNumberOfPoints;
-					for (var i = 0; i < directionsRenderer.length; i++){
-						gDirectionsRenderer[i].setMap(null);
-						gDirectionsRenderer[i].setPanel(null);
-						gDirectionsRenderer[i].infoWindow.close();
-						gDirectionsRenderer[i] = null;
+					for (var i = gDirectionsRenderer.length-1; i >= 0; i--){
+						if (gDirectionsRenderer[i] != null){
+							gDirectionsRenderer[i].setMap(null);
+							gDirectionsRenderer[i].setPanel(null);
+							if(gDirectionsRenderer[i].infoWindow != null){
+								gDirectionsRenderer[i].infoWindow.close();
+							}
+							gDirectionsRenderer[i] = null;
+						}
+						gDirectionsRenderer.pop();
+						
 					}
 					calcNClosestRoute(gAccessPointMarker);
 
@@ -335,7 +367,7 @@ function reverseDirections() {
 
 		// create a request object for the directions service call
 		var request = {
-			origin: gUserMarker.position,
+			origin: gAccessPointMarker.position,
 			destination: endPoints[i],
 			travelMode: google.maps.TravelMode.DRIVING
 		};

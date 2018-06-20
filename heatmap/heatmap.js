@@ -19,8 +19,8 @@ function initMap() {
         
 	//https://drive.google.com/file/d/1qgPBr0l-LBAr9g3bd3l3IFhqkJpfiuwQ/view?usp=sharing
 	// Load KML layer that defines the study area
-	var gKmzLayer = new google.maps.KmlLayer('https://doc-6o-2g-drive-data-export.googleusercontent.com/download/64tf7omv996nmh9vhp3t3o3epr2cplbo/5gq4p0ep7d8d89jjfl8aqusn4dfj9m5a/1527795000000/577820be-6191-49c0-9351-fa47108da4aa/116664334065622372677/ADt3v-OTKt22pKueo__3ASI9jdPtAeKH1kKP_kn6K-KfseAfXWSHQ4vQ7UGusfsRSzTrFgQEDs4bDm9yD5bYk-ud-xXFBuz9GZ904opD2Z5VUAMqLh3_Jfvc9JH8uRI3IId-zVY-6kk3bcMoc_YuF9t5LwNQsUZiJ9GKf31Fdg7LES2N_88jBXrVoWlJiynX_IBKiOGae_5FpzsGlYLW0x3D9VWPaJzPA-odWxdvZc9uHJfgRUKN8T_STISN2-czeoqv3FrPBKpp4WWJddByfqNi3xUzhDre27I6AmzVguCftOlLSHaOjkwKYS4iCV_ToocBI6eo68IBvL-8WZV8AQofvh7cmcKNjaY8KRSi0fkOSQuEnY8ZatJPiKfjBUJZqNIoM4c0IJ97?authuser=0&nonce=li4i3prkc8dvc&user=116664334065622372677&hash=30jns30f9440ca9cevne8dimdsgoccj8', { clickable: false, suppressInfoWindows: true, preserveViewport: true });
-	//var gKmzLayer = new google.maps.KmlLayer('http://www2.ca.uky.edu/forestry/LoggingEPLroutes/assets/kml-data/StudyArea_Black.zip', { clickable: false, suppressInfoWindows: true, preserveViewport: true });
+	
+	var gKmzLayer = new google.maps.KmlLayer('http://www2.ca.uky.edu/forestry/LoggingEPLroutes/assets/kml-data/StudyArea_Black.zip', { clickable: false, suppressInfoWindows: true, preserveViewport: true });
 	gKmzLayer.setMap(gMap);
         google.maps.event.addListener(gMap, 'click', function(event) {
 		clickOnMap()
@@ -46,7 +46,7 @@ function displayHeatmapLayer(emergLocation) {
 	var heatmapLayer;
 	var fileNameStart = emergLocation.toLowerCase() + 'Heatmap';
 	for(var i = 0; i < 12; i++) {
-		heatmapLayer = new google.maps.KmlLayer('http://www2.ca.uky.edu/forestry/LoggingEPLroutes/assets/kml-data/heatmaps/test_d5/' + 
+		heatmapLayer = new google.maps.KmlLayer('http://www2.ca.uky.edu/forestry/LoggingEPLroutes/assets/kml-data/heatmaps/test_d6/' + 
 												heatmapType + '/' + fileNameStart + i + '.zip', 
 												{preserveViewport: true});
 	
