@@ -47,15 +47,7 @@ function initialize() {
 
 	populateAndDisplayMarkers();
 
-	// add click event to place a marker on the map
-	google.maps.event.addListener(gMap, 'click', function (event) {
-		gUserMarker = placeMarker(event.latLng, gUserMarker, gMap);
-
-		// enable the "Calculate routes" button
-		if (document.getElementById('calc_route').disabled) {
-			document.getElementById('calc_route').disabled = false;
-		}
-	});
+	addEventListenerOnMap();
 
 	// Hide directions panel on map load. Panel only needs to be shown when calculate routes
 	document.getElementById("panel-header").style.display = "none";
@@ -148,13 +140,6 @@ function calcRoute(start, end, routeNum, directionsRenderer) {
 				gDirectionsRenderer[i].setPanel(document.getElementById(gPanelId[i]));
 				document.getElementById(buttonIds[i]).innerHTML = buttonNames[i];
 			}
-			
-			/*gDirectionsRenderer[0].setPanel(document.getElementById(gPanelId[0]));
-			document.getElementById("police_button").innerHTML = "Police Station - Optimized Route";
-			gDirectionsRenderer[1].setPanel(document.getElementById(gPanelId[1]));
-			document.getElementById("hospital_button").innerHTML = "Hospital - Optimized Route";
-			gDirectionsRenderer[2].setPanel(document.getElementById(gPanelId[2]));
-			document.getElementById("fire_button").innerHTML = "Fire Department - Optimized Route";*/
 			
 			var position = gDirectionsRenderer[0].directions.routes[0].legs[0].end_location;
 
@@ -424,6 +409,54 @@ function openAfterReverse(renderer, route) {
 	renderer[route].setPanel(document.getElementById(gPanelId[route]));
 }
 
+function addEventListenerOnMap(){
+	// add click event to place a marker on the map
+	google.maps.event.addListener(gMap, 'click', function (event) {
+		gUserMarker = placeMarker(event.latLng, gUserMarker, gMap);
+
+		// enable the "Calculate routes" button
+		if (document.getElementById('calc_route').disabled) {
+			document.getElementById('calc_route').disabled = false;
+		}
+	});
+}
+
+function resetDirectionRenderer(directionRenderer){
+	for(var i = directionRenderer.length -1; i >= 0 ;i-- ){
+		directionRenderer[i].setPanel(null);
+		directionRenderer[i].setMap(null)
+		directionRenderer[i].infoWindow.close();
+		directionRenderer[i] = null;
+		directionRenderer.pop();
+	}
+}
+
+function clearmap(){
+	resetDirectionRenderer(gDirectionsRenderer);
+	resetDirectionRenderer(gDirectionsRenderer2);
+	resetDirectionRenderer(gDirectionsRenderer3);
+	resetDirectionRenderer(rendererToDisplay);
+	
+	rendererToDisplay = gDirectionsRenderer;
+	google.maps.event.clearListeners(gMap, 'click');
+	addEventListenerOnMap();
+	if (gUserMarker != null){
+		gUserMarker.setMap(null);
+		gUserMarker = null;
+	}
+	if (gAccessPointMarker != null){
+		gAccessPointMarker.setMap(null);
+		gAccessPointMarker = null;
+	}
+	
+	document.getElementById("panel-header").style.display = "none";
+	document.getElementById("panel-body").style.display = "none";
+	gClosestPolice = [];
+	gClosestFireStation = [];
+	gClosestHospital = [];
+	gCallback = 3 * gNumberOfPoints;
+
+}
 google.maps.event.addDomListener(window, 'load', initialize);
 
 
