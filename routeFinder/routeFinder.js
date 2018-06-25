@@ -17,6 +17,8 @@ var gPanelId;
 var rendererToDisplay;
 var gAccessPointMarker;
 var gDrawingManager;
+var measureTool;
+var gDistanceMeasureMode;
 
 function initialize() {
 	gDirectionsService = new google.maps.DirectionsService();
@@ -24,6 +26,7 @@ function initialize() {
 	gPanelId = ["police", "hospital", "fire"];
 	rendererToDisplay = gDirectionsRenderer;
 	gAccessPointMarker = null;
+	gDistanceMeasureMode = 0;
 	// create a google map object centered on Kentucky
 	gMap = new google.maps.Map(document.getElementById("map-canvas"), {
 		center: new google.maps.LatLng(37.6000, -84.1000), // KY coordinates
@@ -52,20 +55,17 @@ function initialize() {
 	// Hide directions panel on map load. Panel only needs to be shown when calculate routes
 	document.getElementById("panel-header").style.display = "none";
 	document.getElementById("panel-body").style.display = "none";
-	gDrawingManager =  new google.maps.drawing.DrawingManager({
-        drawingControl: true,
-        drawingControlOptions: {
-          position: google.maps.ControlPosition.TOP_LEFT,
-          drawingModes: [
-            google.maps.drawing.OverlayType.POLYLINE
-          ]
-        },
-        polylineOptions: {
-            strokeColor: "#ff0000",
-            strokeWeight: 2
-        }
-      });
-    gDrawingManager.setMap(gMap);
+	measureTool = new MeasureTool(gMap, {
+		showSegmentLength: false,
+		unit: MeasureTool.UnitTypeId.IMPERIAL 
+	  });
+	
+	  measureTool.addListener('measure_start', function() {
+		gDistanceMeasureMode = 1;
+	  });
+	  measureTool.addListener('measure_end', function() {
+		gDistanceMeasureMode = 0;
+	  });
 }
 
 /**
@@ -412,12 +412,15 @@ function openAfterReverse(renderer, route) {
 function addEventListenerOnMap(){
 	// add click event to place a marker on the map
 	google.maps.event.addListener(gMap, 'click', function (event) {
-		gUserMarker = placeMarker(event.latLng, gUserMarker, gMap);
-
-		// enable the "Calculate routes" button
-		if (document.getElementById('calc_route').disabled) {
-			document.getElementById('calc_route').disabled = false;
+		if(gDistanceMeasureMode == 0){
+			gUserMarker = placeMarker(event.latLng, gUserMarker, gMap);
+			
+			// enable the "Calculate routes" button
+			if (document.getElementById('calc_route').disabled) {
+				document.getElementById('calc_route').disabled = false;
+			}
 		}
+		
 	});
 }
 
@@ -451,10 +454,15 @@ function clearmap(){
 	
 	document.getElementById("panel-header").style.display = "none";
 	document.getElementById("panel-body").style.display = "none";
+	if (!document.getElementById('calc_route').disabled) {
+		document.getElementById('calc_route').disabled = true;
+	}
 	gClosestPolice = [];
 	gClosestFireStation = [];
 	gClosestHospital = [];
 	gCallback = 3 * gNumberOfPoints;
+	measureTool.end();
+
 
 }
 google.maps.event.addDomListener(window, 'load', initialize);
