@@ -33,6 +33,7 @@ function initialize() {
 		zoom: 8,
 		mapTypeId: google.maps.MapTypeId.ROADMAP,
 		mapTypeControl: true,
+		disableDoubleClickZoom: true,
 		mapTypeControlOptions: {
 			style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
 		},
@@ -303,15 +304,6 @@ function calcAllRoutes() {
 	// clear click event listeners on map so the marker doesn't change position anymore
 	google.maps.event.clearListeners(gMap, 'click');
 	calcNClosestRoute(gUserMarker);
-	/*gClosestPolice = findClosest(gUserMarker.getPosition(), gNumberOfPoints, gMarkers);
-	gClosestFireStation = findClosest(gUserMarker.getPosition(), gNumberOfPoints, gMarkers2);
-	gClosestHospital = findClosest(gUserMarker.getPosition(), gNumberOfPoints, gMarkers3);
-
-	for (var i = 0; i < gNumberOfPoints; i++) {
-		calcRoute(gClosestPolice[i].position, gUserMarker.position, i, gDirectionsRenderer);
-		calcRoute(gClosestFireStation[i].position, gUserMarker.position, i, gDirectionsRenderer2);
-		calcRoute(gClosestHospital[i].position, gUserMarker.position, i, gDirectionsRenderer3);
-	}*/
 
 	// add user marker to bounds object
 	gLatlngbounds.extend(gUserMarker.position);
