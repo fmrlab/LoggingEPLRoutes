@@ -29,7 +29,7 @@ function initialize() {
 	gDistanceMeasureMode = 0;
 	// create a google map object centered on Kentucky
 	gMap = new google.maps.Map(document.getElementById("map-canvas"), {
-		center: new google.maps.LatLng(37.6000, -84.1000), // KY coordinates
+		center: new google.maps.LatLng(37.83, -85.75), // KY coordinates
 		zoom: 8,
 		mapTypeId: google.maps.MapTypeId.ROADMAP,
 		mapTypeControl: true,

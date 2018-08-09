@@ -6,7 +6,7 @@ var heatmapType, heatMapInit, gMap;
 */
 function initMap() {
 	heatMapInit = true;
-	var mapCenterPoint = new google.maps.LatLng(37.7479, -84.2947);
+	var mapCenterPoint = new google.maps.LatLng(37.83, -85.75);
 
 	gMap = new google.maps.Map(document.getElementById('map'), {
 		zoom: 8,
