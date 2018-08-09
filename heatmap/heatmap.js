@@ -5,8 +5,6 @@ var heatmapType, heatMapInit, gMap;
 * Initialize google map
 */
 function initMap() {
-        
-
 	heatMapInit = true;
 	var mapCenterPoint = new google.maps.LatLng(37.7479, -84.2947);
 
@@ -15,16 +13,10 @@ function initMap() {
 		center: mapCenterPoint,
 		mapTypeId: google.maps.MapTypeId.ROADMAP
 	});
-        
-        
-	//https://drive.google.com/file/d/1qgPBr0l-LBAr9g3bd3l3IFhqkJpfiuwQ/view?usp=sharing
+
 	// Load KML layer that defines the study area
-	
 	var gKmzLayer = new google.maps.KmlLayer('http://www2.ca.uky.edu/forestry/LoggingEPLroutes/assets/kml-data/StudyArea_Black.zip', { clickable: false, suppressInfoWindows: true, preserveViewport: true });
 	gKmzLayer.setMap(gMap);
-        google.maps.event.addListener(gMap, 'click', function(event) {
-		clickOnMap()
-	});
 
 	populateLocationsArray();
 	setHeatmapType('time');
@@ -46,7 +38,7 @@ function displayHeatmapLayer(emergLocation) {
 	var heatmapLayer;
 	var fileNameStart = emergLocation.toLowerCase() + 'Heatmap';
 	for(var i = 0; i < 12; i++) {
-		heatmapLayer = new google.maps.KmlLayer('http://www2.ca.uky.edu/forestry/LoggingEPLroutes/assets/kml-data/heatmaps/test_d6/' + 
+		heatmapLayer = new google.maps.KmlLayer('http://www2.ca.uky.edu/forestry/LoggingEPLroutes/assets/kml-data/heatmaps/data/' + 
 												heatmapType + '/' + fileNameStart + i + '.zip', 
 												{preserveViewport: true});
 	
@@ -54,15 +46,7 @@ function displayHeatmapLayer(emergLocation) {
 		heatmapLayers.push(heatmapLayer);
 		heatmapLayer.setMap(gMap);
 	}
-	/*for(var i = 0; i < 12; i++) {
-		heatmapLayer = new google.maps.KmlLayer('http://www2.ca.uky.edu/forestry/LoggingEPLroutes/assets/kml-data/heatmaps/' + 
-												heatmapType + '/' + fileNameStart + i + '.zip', 
-												{preserveViewport: true});
-	
-		// Store layer in array so we can remove it later to display other heatmaps
-		heatmapLayers.push(heatmapLayer);
-		heatmapLayer.setMap(gMap);
-	}*/
+
 	
 }
 
@@ -131,113 +115,4 @@ function checkLocationType(){
 	} else {
 		return 'Fire';
 	}
-}
-
-function clickOnMap(){
-    var isIn = isInside([37.926128, -84.488834]);
-    console.log(isIn);
-    var isIn2 = isInside([36.579493, -85.202945]);
-    console.log(isIn2);
-	var spacing = 1;/*55.438*/
-	var d = new Date();
-	var n1 = d.getTime();
-	var pointList = generateAllPointsInsideArea([37.6000, -84.1000], spacing);
-	var d2 = new Date();
-	var n2 = d2.getTime();
-	console.log(n2-n1);
-	var boundingBoxList = generateBoundingBoxes(pointList, spacing);
-    // //var no_points = boundingBoxList.length;
-    var no_points = pointList.length;
-    if(spacing > 1){
-        for(var i = 0; i<no_points; ){
-            var cityCircle = new google.maps.Circle({
-                strokeColor: '#FF0000',
-                strokeOpacity: 0.8,
-                strokeWeight: 2,
-                fillColor: '#FF0000',
-                fillOpacity: 0.8,
-                map: gMap,
-                center: {lat: pointList[i][0], lng: pointList[i][1]},
-                radius: 100
-			});
-			i = i+10;
-        }
-    }
-    
-
-
-    for(var i = 0; i<no_points; i++){
-        var rectangle = new google.maps.Rectangle({
-            strokeColor: '#FF0000',
-            strokeOpacity: 0.8,
-            strokeWeight: 1,
-            fillColor: '#FF0000',
-            fillOpacity: 0.35,
-            map: gMap,
-            bounds: {
-                north: boundingBoxList[i][2],
-                south: boundingBoxList[i][0],
-                east: boundingBoxList[i][3],
-                west: boundingBoxList[i][1]
-            }
-        });
-	}
-	// var rectangle = new google.maps.Rectangle({
-	// 	        strokeColor: '#FF0000',
-	// 	        strokeOpacity: 0.8,
-	// 	        strokeWeight: 1,
-	// 	        fillColor: '#FF0000',
-	// 	        fillOpacity: 0.35,
-	// 	        map: gMap,
-	// 	        bounds: {
-	// 	            north: 38.603909,
-	// 	            south: 36.637483,
-	// 	            east: -83.639181,
-	// 	            west: -85.375021
-	// 	        }
-	// 		});
-	// var rectangle1 = new google.maps.Rectangle({
-	// 	        strokeColor: '#FF0000',
-	// 	        strokeOpacity: 0.8,
-	// 	        strokeWeight: 1,
-	// 	        fillColor: '#FF0000',
-	// 	        fillOpacity: 0.35,
-	// 	        map: gMap,
-	// 	        bounds: {
-	// 	            north: 37.782744,
-	// 	            south: 36.664926,
-	// 	            east: -83.711579,
-	// 	            west: -87.892435
-	// 	        }
-	// 		});
-	
-	// var rectangle2 = new google.maps.Rectangle({
-	// 	        strokeColor: '#FF0000',
-	// 	        strokeOpacity: 0.8,
-	// 	        strokeWeight: 1,
-	// 	        fillColor: '#FF0000',
-	// 	        fillOpacity: 0.35,
-	// 	        map: gMap,
-	// 	        bounds: {
-	// 	            north: 38.543785,
-	// 	            south: 37.059475,
-	// 	            east: -82.743796,
-	// 	            west: -85.391501
-	// 	        }
-	// 		});
-	// var rectangle3 = new google.maps.Rectangle({
-	// 	        strokeColor: '#FF0000',
-	// 	        strokeOpacity: 0.8,
-	// 	        strokeWeight: 1,
-	// 	        fillColor: '#FF0000',
-	// 	        fillOpacity: 0.35,
-	// 	        map: gMap,
-	// 	        bounds: {
-	// 	            north: 37.062830,
-	// 	            south: 36.512081,
-	// 	            east: -88.085736,
-	// 	            west: -89.097518
-	// 	        }
-	// 	    });
-			
 }

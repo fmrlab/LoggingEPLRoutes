@@ -1,6 +1,17 @@
 <!doctype html>
 <html>
+
 <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-123332542-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-123332542-1');
+    </script>
+
     <meta charset="utf-8">
     <title>LoggingEPLroutes</title>
 
@@ -8,26 +19,30 @@
     <link rel="stylesheet" type="text/css" href="common/pageHeader.css">
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-
 </head>
 
 
 <body>
 
     <div id="header">
-         <div id="ukLogo"><img src="assets/images/logos/uk-logo.gif"/></div>
-         <div id="pageTitle">Emergency Personnel Location Route Finder</div>
+        <div id="ukLogo">
+            <img src="assets/images/logos/uk-logo.gif" />
+        </div>
+        <div id="pageTitle">Emergency Personnel Location Route Finder</div>
     </div>
 
 
     <div class="container">
 
         <div class="description">
-            To comply with regulations of the Occupational Safety and Health Administration (OSHA), logging firms are required to provide emergency plans prior to the start of ground operations.  These plans include access routes and directions from logging sites to emergency personnel locations (ELP), such as hospitals and police and fire stations.
-            <br><br>
-            This web-based application is designed to generate least-travel-time routes from ELP to any logging site within 53 counties in the Central Appalachian Region (CAR) of Kentucky.
-            <br><br>
-            This tool is part of a pilot study funded by the CAR Education and Research Center.
+            To comply with regulations of the Occupational Safety and Health Administration (OSHA), logging firms are required to provide
+            emergency plans prior to the start of ground operations. These plans include access routes and directions from
+            logging sites to emergency personnel locations (ELP), such as hospitals and police and fire stations.
+            <br>
+            <br> This web-based application is designed to generate least-travel-time routes from ELP to any logging site within
+            53 counties in the Central Appalachian Region (CAR) of Kentucky.
+            <br>
+            <br> This tool is part of a pilot study funded by the CAR Education and Research Center.
             <br>
             <br>
         </div>
@@ -40,12 +55,14 @@
                 <li>Scroll down to see directions from the closest ELP to the logging site</li>
             </ul>
 
-          <h4>Please note that:</h4>
+            <h4>Please note that:</h4>
             <ul>
                 <li>The marker indicating the logging site can be dragged to improve the accuracy of its location</li>
-                <li>Once the map is clicked to identify the location of the logging site, an infowindow appears displaying its lat/long and the address of the closest point on an existing road</li>
+                <li>Once the map is clicked to identify the location of the logging site, an infowindow appears displaying its
+                    lat/long and the address of the closest point on an existing road</li>
                 <li>After routes are generated, infowindows appear alongside the routes displaying mileage and travel time</li>
-                <li>By default, directions are displayed from the EPL to the logging site, but reverse directions can be obtained by clicking the "Reverse" button on top of the directions panel</li>
+                <li>By default, directions are displayed from the EPL to the logging site, but reverse directions can be obtained
+                    by clicking the "Reverse" button on top of the directions panel</li>
                 <li>Individual routes can be dragged if needed, but please be aware that this might result in sub-optimal routes</li>
             </ul>
 
@@ -56,10 +73,10 @@
             <button type="button" id="enter-button" onClick="location.href='routeFinder/routeFinder.html'">Enter</button>
         </div>
 
- 		<div class="instruction">
-        	<h4 id="heatmapDescription">Heatmaps showing least-travel distance and time over the 53 counties were created to visualize isolated areas</h4>
-          </div>  
-       
+        <div class="instruction">
+            <h4 id="heatmapDescription">Heatmaps showing least-travel distance and time over the 53 counties were created to visualize isolated areas</h4>
+        </div>
+
         <div class="access-buttons">
             <button type="button" id="heatmap-button" onClick="location.href='heatmap/heatmap.html'">Heatmaps</button>
         </div>
@@ -68,9 +85,17 @@
             <table width="100%" border="0" align="center">
                 <tr>
                     <td width="30%">&nbsp;</td>
-                    <td width="14%"><a href="assets/downloadFile/comp_routine.pdf"><img src="assets/images/pics/thumbnail-100x100.png" width="50" height="50" /></a></td>
+                    <td width="14%">
+                        <a href="assets/downloadFile/comp_routine.pdf">
+                            <img src="assets/images/pics/thumbnail-100x100.png" width="50" height="50" />
+                        </a>
+                    </td>
                     <td width="14%">&nbsp;</td>
-                    <td width="12%"><a href="assets/downloadFile/EPL.pdf"><img src="assets/images/pics/thumbnail-100x100.png" width="50" height="50" /></a></td>
+                    <td width="12%">
+                        <a href="assets/downloadFile/EPL.pdf">
+                            <img src="assets/images/pics/thumbnail-100x100.png" width="50" height="50" />
+                        </a>
+                    </td>
                     <td width="30%">&nbsp;</td>
                 </tr>
                 <tr>
@@ -93,10 +118,11 @@
     </div>
 
     <div id="footer">
-        Developed by Luciano Di Matteo, Gustavo Ocasio, and Marco Contreras
-        <br>
-        Last updated, July 2016
+        Developed by Md Sultan Al Nahian and Marco Contreras
+        <br> Version 2.0
+        <br> Last updated, August 2018
     </div>
 
 </body>
+
 </html>
