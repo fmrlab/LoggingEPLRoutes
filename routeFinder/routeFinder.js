@@ -41,7 +41,7 @@ function initialize() {
 	});
 
 	// Load KML layer that defines the study area
-	gKmzLayer = new google.maps.KmlLayer('http://www2.ca.uky.edu/forestry/loggingEPLroutes/assets/kml-data/StudyArea.zip', {
+	gKmzLayer = new google.maps.KmlLayer('http://www2.ca.uky.edu/forestry/loggingEPLroutes/assets/kml-data/StudyArea_1.zip', {
 		clickable: false,
 		suppressInfoWindows: true,
 		preserveViewport: true
